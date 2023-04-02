@@ -5,7 +5,7 @@ RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
 
 HERE="$(dirname -- "${BASH_SOURCE[0]}")"
 SCRIPT_GET_SONAR_QUBE="get_sonar_qube.sh"
-SCRIPT_GET_SONAR_QUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube"
+SCRIPT_GET_SONAR_QUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube/$SCRIPT_GET_SONAR_QUBE"
 
 if test -e "$RECIPES"; then
 
