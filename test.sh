@@ -13,11 +13,19 @@ if test -e "$RECIPES"; then
 
     . "$RECIPE_SONAR_CUBE"
 
-    echo "$PARAM_SONARQUBE_NAME test starting"
+    if [ -n "$PARAM_SONARQUBE_NAME" ]; then
+      
+      echo "$PARAM_SONARQUBE_NAME test starting"
+
+    else
+      
+      echo "ERROR: PARAM_SONARQUBE_NAME is not provided"
+      exit 1
+    fi
 
     if test -e "$SCRIPT_GET_SONAR_QUBE_FULL_PATH"; then
 
-      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH"; then
+      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME"; then
 
         echo "SonarQube is ready"
 
