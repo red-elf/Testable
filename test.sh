@@ -26,9 +26,16 @@ if test -e "$RECIPES"; then
       exit 1
     fi
 
+    if [ -z "$PARAM_SONARQUBE_PORT" ]; then
+      
+      PARAM_SONARQUBE_PORT="9000"
+    fi
+
+    echo "To bind the port: $PARAM_SONARQUBE_PORT"
+
     if test -e "$SCRIPT_GET_SONAR_QUBE_FULL_PATH"; then
 
-      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$DIR_VOLUMES_FULL_PATH"; then
+      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$DIR_VOLUMES_FULL_PATH" "$PARAM_SONARQUBE_PORT"; then
 
         echo "SonarQube is ready"
 
