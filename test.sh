@@ -4,7 +4,7 @@ RECIPES="Recipes"
 DIR_VOLUMES="_Volumes"
 RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
 
-HERE="$(dirname -- "${BASH_SOURCE[0]}")"
+HERE="$(dirname -- "$0")"
 SCRIPT_GET_SONAR_QUBE="get_sonar_qube.sh"
 
 DIR_VOLUMES_FULL_PATH="$(pwd)/$DIR_VOLUMES"
