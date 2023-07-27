@@ -4,9 +4,9 @@ RECIPES="Recipes"
 RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
 
 HERE="$(dirname -- "$0")"
-SCRIPT_GET_SONAR_QUBE="get_sonar_qube.sh"
+SCRIPT_GET_SONARQUBE="get_sonar_qube.sh"
 
-SCRIPT_GET_SONAR_QUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube/$SCRIPT_GET_SONAR_QUBE"
+SCRIPT_GET_SONARQUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
 
 if test -e "$RECIPES"; then
 
@@ -31,21 +31,64 @@ if test -e "$RECIPES"; then
 
     echo "To bind the port: $PARAM_SONARQUBE_PORT"
 
-    if test -e "$SCRIPT_GET_SONAR_QUBE_FULL_PATH"; then
+    if test -e "$SCRIPT_GET_SONARQUBE_FULL_PATH"; then
 
-      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT"; then
+      if [ -n "$DB_USER" ]; then
 
-        echo "SonarQube is ready"
+        if [ -z "$DB_PASSWORD" ]; then
+      
+          echo "ERROR: Password parameter is mandatory when DB user is provided for the test"
+          exit 1
+        fi
 
+        if [ -n "$ADMIN_USER" ]; then
+      
+          if [ -z "$ADMIN_PASSWORD" ]; then
+      
+            echo "ERROR: Password parameter is mandatory when ADMIN user is provided for the test"
+            exit 1
+          fi
+
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" \
+            "$ADMIN_USER" "$ADMIN_PASSWORD"; then
+
+            echo "SonarQube is ready"
+
+          else
+
+            echo "ERROR: SonarQube is not ready (3)"
+            exit 1
+          fi
+
+        else
+
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
+
+            echo "SonarQube is ready"
+
+          else
+
+            echo "ERROR: SonarQube is not ready (2)"
+            exit 1
+          fi
+        fi
       else
 
-        echo "ERROR: SonarQube is not ready"
-        exit 1
+        if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT"; then
+
+          echo "SonarQube is ready"
+
+        else
+
+          echo "ERROR: SonarQube is not ready"
+          exit 1
+        fi
+      
       fi
 
     else
 
-      echo "ERROR: Not found '$SCRIPT_GET_SONAR_QUBE_FULL_PATH'"
+      echo "ERROR: Not found '$SCRIPT_GET_SONARQUBE_FULL_PATH'"
       exit 1
     fi
 
