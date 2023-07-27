@@ -14,22 +14,22 @@ if test -e "$RECIPES"; then
 
     . "$RECIPE_SONAR_CUBE"
 
-    if [ -n "$PARAM_SONARQUBE_NAME" ]; then
+    if [ -n "$SONARQUBE_NAME" ]; then
       
-      echo "$PARAM_SONARQUBE_NAME test starting"
+      echo "$SONARQUBE_NAME test starting"
 
     else
       
-      echo "ERROR: PARAM_SONARQUBE_NAME is not provided"
+      echo "ERROR: SONARQUBE_NAME is not provided"
       exit 1
     fi
 
-    if [ -z "$PARAM_SONARQUBE_PORT" ]; then
+    if [ -z "$SONARQUBE_PORT" ]; then
       
-      PARAM_SONARQUBE_PORT="9000"
+      SONARQUBE_PORT="9000"
     fi
 
-    echo "To bind the port: $PARAM_SONARQUBE_PORT"
+    echo "To bind the port: $SONARQUBE_PORT"
 
     if test -e "$SCRIPT_GET_SONARQUBE_FULL_PATH"; then
 
@@ -49,7 +49,7 @@ if test -e "$RECIPES"; then
             exit 1
           fi
 
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" \
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" \
             "$ADMIN_USER" "$ADMIN_PASSWORD"; then
 
             echo "SonarQube is ready"
@@ -62,7 +62,7 @@ if test -e "$RECIPES"; then
 
         else
 
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
 
             echo "SonarQube is ready"
 
@@ -74,7 +74,7 @@ if test -e "$RECIPES"; then
         fi
       else
 
-        if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT"; then
+        if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT"; then
 
           echo "SonarQube is ready"
 
