@@ -1,13 +1,11 @@
 #!/bin/bash
 
 RECIPES="Recipes"
-DIR_VOLUMES="_Volumes"
 RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
 
 HERE="$(dirname -- "$0")"
 SCRIPT_GET_SONAR_QUBE="get_sonar_qube.sh"
 
-DIR_VOLUMES_FULL_PATH="$(pwd)/$DIR_VOLUMES"
 SCRIPT_GET_SONAR_QUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube/$SCRIPT_GET_SONAR_QUBE"
 
 if test -e "$RECIPES"; then
@@ -35,7 +33,7 @@ if test -e "$RECIPES"; then
 
     if test -e "$SCRIPT_GET_SONAR_QUBE_FULL_PATH"; then
 
-      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$DIR_VOLUMES_FULL_PATH" "$PARAM_SONARQUBE_PORT"; then
+      if sh "$SCRIPT_GET_SONAR_QUBE_FULL_PATH" "$PARAM_SONARQUBE_NAME" "$PARAM_SONARQUBE_PORT"; then
 
         echo "SonarQube is ready"
 
