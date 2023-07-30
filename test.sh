@@ -41,22 +41,15 @@ if test -e "$RECIPES"; then
           exit 1
         fi
 
-        if [ -n "$ADMIN_USER" ]; then
+        if [ -n "$ADMIN_PASSWORD" ]; then
       
-          if [ -z "$ADMIN_PASSWORD" ]; then
-      
-            echo "ERROR: Password parameter is mandatory when ADMIN user is provided for the test"
-            exit 1
-          fi
-
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" \
-            "$ADMIN_USER" "$ADMIN_PASSWORD"; then
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
 
             echo "SonarQube is ready"
 
           else
 
-            echo "ERROR: SonarQube is not ready (3)"
+            echo "ERROR: SonarQube is not ready (2)"
             exit 1
           fi
 
@@ -68,22 +61,15 @@ if test -e "$RECIPES"; then
 
           else
 
-            echo "ERROR: SonarQube is not ready (2)"
+            echo "ERROR: SonarQube is not ready (1)"
             exit 1
           fi
         fi
+        
       else
 
-        if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT"; then
-
-          echo "SonarQube is ready"
-
-        else
-
-          echo "ERROR: SonarQube is not ready"
-          exit 1
-        fi
-      
+        echo "ERROR: DB user parameter is mandatory"
+        exit 1
       fi
 
     else
