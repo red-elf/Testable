@@ -12,6 +12,7 @@ if test -e "$RECIPES"; then
 
   if test -e "$RECIPE_SONAR_CUBE"; then
 
+    # shellcheck disable=SC1090
     . "$RECIPE_SONAR_CUBE"
 
     if [ -n "$SONARQUBE_NAME" ]; then
