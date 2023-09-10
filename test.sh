@@ -1,8 +1,12 @@
 #!/bin/bash
 
-echo "Starting the test procedure"
+if [ -z "$SUBMODULES_HOME" ]; then
 
-HERE="$(dirname -- "$0")"
+  echo "ERROR: SUBMODULES_HOME not available"
+  exit 1
+fi
+
+echo "Starting the test procedure"
 
 if [ -n "$1" ]; then
 
@@ -11,12 +15,13 @@ if [ -n "$1" ]; then
 else
 
   RECIPES="Recipes"
+
 fi
 
 SCRIPT_GET_SONARQUBE="get_sonar_qube.sh"
 RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
 
-SCRIPT_GET_SONARQUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
+SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
 
 if test -e "$RECIPES"; then
 
