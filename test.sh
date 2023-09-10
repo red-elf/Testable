@@ -1,14 +1,26 @@
 #!/bin/bash
 
-RECIPES="Recipes"
-RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
+echo "Starting the test procedure"
 
 HERE="$(dirname -- "$0")"
+
+if [ -n "$1" ]; then
+
+  RECIPES="$1/Recipes"
+
+else
+
+  RECIPES="Recipes"
+fi
+
 SCRIPT_GET_SONARQUBE="get_sonar_qube.sh"
+RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
 
 SCRIPT_GET_SONARQUBE_FULL_PATH="$HERE/../Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
 
 if test -e "$RECIPES"; then
+
+  echo "Using recipes from: $RECIPES"
 
   if test -e "$RECIPE_SONAR_CUBE"; then
 
