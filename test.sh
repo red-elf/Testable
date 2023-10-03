@@ -25,8 +25,6 @@ if test -e "$RECIPES"; then
 
     if [ -n "$SONARQUBE_SERVER" ]; then
 
-      echo "Using external SonarQube instance: $SONARQUBE_SERVER"
-
       SCRIPT_SONAR_SCAN="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/sonar_scan.sh"
 
       if ! test -e "$SCRIPT_SONAR_SCAN"; then
