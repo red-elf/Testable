@@ -21,7 +21,7 @@ if test -e "$RECIPES"; then
 
   echo "Using recipes from: $RECIPES"
 
-  RUN_TESTS() {
+  RUN_SONARQUBE_TESTS() {
 
     if [ -n "$SONARQUBE_SERVER" ]; then
 
@@ -38,6 +38,17 @@ if test -e "$RECIPES"; then
       sh "$SCRIPT_SONAR_SCAN" "$$RECIPES/.."
 
     fi
+  }
+
+  RUN_CODEBASE_TESTS() {
+
+    echo "ERROR: Codebase tests are not yet implemented"
+  }
+
+  RUN_TESTS() {
+
+    RUN_SONARQUBE_TESTS
+    RUN_CODEBASE_TESTS
   }
 
   BRING_SONARQUBE_UP() {
