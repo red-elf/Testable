@@ -27,7 +27,15 @@ if test -e "$RECIPES"; then
 
       echo "Using external SonarQube instance: $SONARQUBE_SERVER"
 
-      # TODO
+      SCRIPT_SONAR_SCAN="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/sonar_scan.sh"
+
+      if ! test -e "$SCRIPT_SONAR_SCAN"; then
+
+        echo "ERROR: Scrript not found '$SCRIPT_SONAR_SCAN'"
+        exit 1
+      fi
+
+      sh "$SCRIPT_SONAR_SCAN" "$$RECIPES/.."
 
     fi
   }
