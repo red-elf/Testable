@@ -10,11 +10,21 @@ echo "Starting the test procedure"
 
 if [ -n "$1" ]; then
 
-  RECIPES="$1/Recipes"
+  RECIPES="$1"
 
 else
 
-  RECIPES="Recipes"
+  echo "ERROR: Path to the recipes directory is mandatory"
+  exit 1
+fi
+
+if [ -n "$2" ]; then
+
+  MODULE="$2"
+
+else
+
+  MODULE="$RECIPES"
 fi
 
 if test -e "$RECIPES"; then
@@ -33,7 +43,7 @@ if test -e "$RECIPES"; then
         exit 1
       fi
 
-      sh "$SCRIPT_SONAR_SCAN" "$$RECIPES/.."
+      sh "$SCRIPT_SONAR_SCAN" "$MODULE"
 
     fi
   }
@@ -123,7 +133,7 @@ if test -e "$RECIPES"; then
   }
 
   SCRIPT_GET_SONARQUBE="get_sonar_qube.sh"
-  RECIPE_SONAR_CUBE="$RECIPES/sonar_qube_parameters.sh"
+  RECIPE_SONAR_CUBE="$RECIPES/installation_parameters_sonarqube.sh"
   SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
 
   if [ -n "$SONARQUBE_SERVER" ]; then
