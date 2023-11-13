@@ -133,7 +133,7 @@ if test -e "$RECIPES"; then
   }
 
   SCRIPT_GET_SONARQUBE="get_sonar_qube.sh"
-  RECIPE_SONAR_CUBE="$RECIPES/installation_parameters_sonarqube.sh"
+  RECIPE_SONAR_CUBE="$RECIPES/SonarQube/installation_parameters_sonarqube.sh"
   SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
 
   if [ -n "$SONARQUBE_SERVER" ]; then
