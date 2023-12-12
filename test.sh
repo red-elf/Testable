@@ -123,7 +123,6 @@ if test -e "$RECIPES"; then
 
     # TODO: 
     # 
-    # - Docker container name to be something instance specific, not the project specific
     # - Once the SonarQube is up, export the env. vatiable for SONARQUBE_SERVER if it is not already defined in .rc file!
 
     if test -e "$RECIPE_SONAR_CUBE"; then
