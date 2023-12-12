@@ -88,13 +88,15 @@ if test -e "$RECIPES"; then
 
           SONARQUBE_PROJECT="${VERSIONABLE_NAME_NO_SPACE}_$VERSIONABLE_VERSION_PRIMARY.$VERSIONABLE_VERSION_SECONDARY.$VERSIONABLE_VERSION_PATCH"
           
-          BADGE_URL="http://$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$SONARQUBE_TOKEN"
+          BADGE_URL="$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$SONARQUBE_TOKEN"
 
           echo "Badge URL: $BADGE_URL"
 
-          # TODO: Write the code quality badge and re-generated PDF from README file
-          #
-          # Assets/Generated_SonarQube_Measure.svg
+          # TODO:
+          # 
+          # - Once sonar qube has been set, setup tokens and permissions
+          # - Here us the proper token to obtain the badge
+          # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
 
         else
 
