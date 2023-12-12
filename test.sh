@@ -49,11 +49,17 @@ if test -e "$RECIPES"; then
 
           echo "Obtaining the Qulity Gate badge"
 
-          BADGE_URL="http://$SONARQUBE_SERVER/api/project_badges/measure?project=HelixTrack_Core.1.0.0&metric=alert_status&token=$SONARQUBE_TOKEN"
-
           # TODO: Code quality badges
           #
           # Assets/Generated_SonarQube_Measure.svg
+
+          # TODO: Project
+          #
+          SONARQUBE_PROJECT="HelixTrack_Core.1.0.0"
+          
+          BADGE_URL="http://$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$SONARQUBE_TOKEN"
+
+          
 
         else
 
