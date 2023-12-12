@@ -121,6 +121,11 @@ if test -e "$RECIPES"; then
 
   BRING_SONARQUBE_UP() {
 
+    # TODO: 
+    # 
+    # - Docker container name to be something instance specific, not the project specific
+    # - Once the SonarQube is up, export the env. vatiable for SONARQUBE_SERVER if it is not already defined in .rc file!
+
     if test -e "$RECIPE_SONAR_CUBE"; then
 
       # shellcheck disable=SC1090
