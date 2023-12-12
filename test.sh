@@ -45,14 +45,21 @@ if test -e "$RECIPES"; then
 
       if sh "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
-        echo "Obtaining the Qulity Gate badge"
+        if [ -n "$SONARQUBE_TOKEN" ]; then
 
-        # TODO: Code quality badges
-        #
-        # http://general-server.local:9102/api/project_badges/measure?project=HelixTrack_Core.1.0.0&metric=alert_status&token=sqb_349b1a2ac1ee21e016f235b4c175b06bcbe7782a
-        # Assets/Generated_SonarQube_Measure.svg
+          echo "Obtaining the Qulity Gate badge"
 
+          BADGE_URL="http://$SONARQUBE_SERVER/api/project_badges/measure?project=HelixTrack_Core.1.0.0&metric=alert_status&token=$SONARQUBE_TOKEN"
 
+          # TODO: Code quality badges
+          #
+          # Assets/Generated_SonarQube_Measure.svg
+
+        else
+
+          echo "ERROR: The 'SONARQUBE_TOKEN' is not defined."
+          exit 1
+        fi
       fi
 
     fi
