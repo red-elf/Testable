@@ -43,7 +43,17 @@ if test -e "$RECIPES"; then
         exit 1
       fi
 
-      sh "$SCRIPT_SONAR_SCAN" "$MODULE"
+      if sh "$SCRIPT_SONAR_SCAN" "$MODULE"; then
+
+        echo "Obtaining the Qulity Gate badge"
+
+        # TODO: Code quality badges
+        #
+        # http://general-server.local:9102/api/project_badges/measure?project=HelixTrack_Core.1.0.0&metric=alert_status&token=sqb_349b1a2ac1ee21e016f235b4c175b06bcbe7782a
+        # Assets/Generated_SonarQube_Measure.svg
+
+
+      fi
 
     fi
   }
