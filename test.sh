@@ -113,14 +113,22 @@ if test -e "$RECIPES"; then
 
           BADGE_TOKEN_JSON=$(curl "$BADGE_TOKEN_OBTAIN_URL")
 
-          # TODO: Get badge token from obtained JSON (BADGE_TOKEN_JSON)
+          if [ "$BADGE_TOKEN_JSON" = "" ]; then
 
-          echo "Badge URL: $BADGE_URL"
+            echo "WARNING: No badge token JSON obtained"
 
-          # TODO:
-          #
-          # - Here use the proper token to obtain the badge
-          # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
+          else
+
+              # TODO: Get badge token from obtained JSON (BADGE_TOKEN_JSON)
+
+              echo "Badge URL: $BADGE_URL"
+
+              # TODO:
+              #
+              # - Here use the proper token to obtain the badge
+              # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
+              #
+          fi
 
         else
 
