@@ -244,10 +244,9 @@ if test -e "$RECIPES"; then
           
           SONARQUBE_SERVER="http://$HOST_NAME_TO_SET:$PORT_TO_SET"
           
-
           export SONARQUBE_SERVER
 
-          ADD_VARIABLE "SONARQUBE_SERVER" "$HOST_NAME_TO_SET"
+          ADD_VARIABLE "SONARQUBE_SERVER" "$SONARQUBE_SERVER"
         }
 
         if [ -n "$ADMIN_PASSWORD" ]; then
