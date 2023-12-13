@@ -267,16 +267,12 @@ if test -e "$RECIPES"; then
 
       LOAD_SONARQUBE_RECIPE
 
-      if [ "$SONARQUBE_NAME" = "" ]; then
+      DOCKER_CONTAINER_PREFIX="sonarqube"
+      DOCKER_CONTAINER="$DOCKER_CONTAINER_PREFIX.$SONARQUBE_NAME"
 
-        echo "WARNING: No 'SONARQUBE_NAME' to check"
+      echo "Checking: $SONARQUBE_NAME"
 
-      else
-
-        echo "Checking: $SONARQUBE_NAME"
-      fi
-
-      if [ "$SONARQUBE_NAME" = "" ] || GET_CONTAINER_ADDRESS "$SONARQUBE_NAME" | grep "Error: No such object"; then
+      if [ "$SONARQUBE_NAME" = "" ] || ! docker ps -a | grep "$DOCKER_CONTAINER"; then
 
         BRING_SONARQUBE_UP
 
