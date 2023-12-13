@@ -30,7 +30,7 @@ fi
 SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
 RECIPE_SONAR_CUBE="$RECIPES/SonarQube/installation_parameters_sonarqube.sh"
 SCRIPT_GET_JQ="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/Programs/get_jq.sh"
-SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/get_sonar_qube.sh"
+SCRIPT_GET_SONARQUBE="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/get_sonar_qube.sh"
 SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
 
 if ! test -e "$SCRIPT_ENV"; then
@@ -215,7 +215,7 @@ if test -e "$RECIPES"; then
 
     echo "To bind the port: $SONARQUBE_PORT"
 
-    if test -e "$SCRIPT_GET_SONARQUBE_FULL_PATH"; then
+    if test -e "$SCRIPT_GET_SONARQUBE"; then
 
       if [ -n "$DB_USER" ]; then
 
@@ -252,7 +252,7 @@ if test -e "$RECIPES"; then
         if [ -n "$ADMIN_PASSWORD" ]; then
       
           # shellcheck disable=SC1090
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
+          if bash "$SCRIPT_GET_SONARQUBE" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
 
             echo "SonarQube is ready (1)"
 
@@ -267,7 +267,7 @@ if test -e "$RECIPES"; then
         else
 
           # shellcheck disable=SC1090
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
+          if bash "$SCRIPT_GET_SONARQUBE" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
 
             echo "SonarQube is ready (2)"
 
@@ -288,7 +288,7 @@ if test -e "$RECIPES"; then
 
     else
 
-      echo "ERROR: Script not found '$SCRIPT_GET_SONARQUBE_FULL_PATH'"
+      echo "ERROR: Script not found '$SCRIPT_GET_SONARQUBE'"
       exit 1
     fi
   }
