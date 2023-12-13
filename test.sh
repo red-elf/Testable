@@ -9,6 +9,7 @@ if [ -z "$SUBMODULES_HOME" ]; then
 fi
 
 SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
+SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
 
 if ! test -e "$SCRIPT_ENV"; then
 
@@ -16,8 +17,17 @@ if ! test -e "$SCRIPT_ENV"; then
     exit 1
 fi
 
+if ! test -e "$SCRIPT_GET_CONTAINER_ADDRESS"; then
+
+    echo "ERROR: Script not found '$SCRIPT_GET_CONTAINER_ADDRESS'"
+    exit 1
+fi
+
 # shellcheck disable=SC1090
 . "$SCRIPT_ENV"
+
+# shellcheck disable=SC1090
+. "$SCRIPT_GET_CONTAINER_ADDRESS"
 
 echo "Starting the test procedure"
 
@@ -132,10 +142,6 @@ if test -e "$RECIPES"; then
 
   BRING_SONARQUBE_UP() {
 
-    # TODO: 
-    #
-    # - Once the SonarQube is up, export the env. vatiable for SONARQUBE_SERVER if it is not already defined in .rc file!
-
     if test -e "$RECIPE_SONAR_CUBE"; then
 
       # shellcheck disable=SC1090
@@ -143,7 +149,7 @@ if test -e "$RECIPES"; then
 
       if [ -n "$SONARQUBE_NAME" ]; then
         
-        echo "$SONARQUBE_NAME test starting"
+        echo "SonarQube container: $SONARQUBE_NAME"
 
       else
         
@@ -235,14 +241,18 @@ if test -e "$RECIPES"; then
 
     if [ "$SONARQUBE_SERVER" = "localhost" ] || [ "$SONARQUBE_SERVER" = "127.0.0.1" ]; then
 
-      echo "Using localhost SonarQube instance"
+      if GET_CONTAINER_ADDRESS "$SONARQUBE_NAME" | grep "Error: No such object" >/dev/null 2>&1; then
 
-      # TODO: If not up already do BRING_SONARQUBE_UP
+        BRING_SONARQUBE_UP
+
+      else
+
+        echo "Using localhost SonarQube instance"
+      fi
 
     else
 
       echo "Using external SonarQube instance: $SONARQUBE_SERVER"
-
     fi
 
   else
