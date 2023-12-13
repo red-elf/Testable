@@ -145,7 +145,6 @@ if test -e "$RECIPES"; then
               #
               # - Here use the proper token to obtain the badge
               # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
-              #
 
             else
 
