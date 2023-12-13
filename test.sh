@@ -254,13 +254,13 @@ if test -e "$RECIPES"; then
           # shellcheck disable=SC1090
           if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
 
-            echo "SonarQube is ready"
+            echo "SonarQube is ready (1)"
 
             ADD_SONARQUBE_SERVER_VARIABLE "localhost" "$SONARQUBE_PORT"
 
           else
 
-            echo "ERROR: SonarQube is not ready (2)"
+            echo "ERROR: SonarQube is not ready (1)"
             exit 1
           fi
 
@@ -269,13 +269,13 @@ if test -e "$RECIPES"; then
           # shellcheck disable=SC1090
           if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
 
-            echo "SonarQube is ready"
+            echo "SonarQube is ready (2)"
 
             ADD_SONARQUBE_SERVER_VARIABLE "localhost" "$SONARQUBE_PORT"
 
           else
 
-            echo "ERROR: SonarQube is not ready (1)"
+            echo "ERROR: SonarQube is not ready (2)"
             exit 1
           fi
         fi
