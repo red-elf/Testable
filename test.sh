@@ -8,9 +8,30 @@ if [ -z "$SUBMODULES_HOME" ]; then
   exit 1
 fi
 
+if [ -n "$1" ]; then
+
+  RECIPES="$1"
+
+else
+
+  echo "ERROR: Path to the recipes directory is mandatory"
+  exit 1
+fi
+
+if [ -n "$2" ]; then
+
+  MODULE="$2"
+
+else
+
+  MODULE="$RECIPES"
+fi
+
 SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
+RECIPE_SONAR_CUBE="$RECIPES/SonarQube/installation_parameters_sonarqube.sh"
 SCRIPT_GET_JQ="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/Programs/get_jq.sh"
 SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
+SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/get_sonar_qube.sh"
 
 if ! test -e "$SCRIPT_ENV"; then
 
@@ -38,25 +59,6 @@ fi
 
 echo "Starting the test procedure"
 
-if [ -n "$1" ]; then
-
-  RECIPES="$1"
-
-else
-
-  echo "ERROR: Path to the recipes directory is mandatory"
-  exit 1
-fi
-
-if [ -n "$2" ]; then
-
-  MODULE="$2"
-
-else
-
-  MODULE="$RECIPES"
-fi
-
 if test -e "$RECIPES"; then
 
   echo "Using recipes from: $RECIPES"
@@ -73,7 +75,8 @@ if test -e "$RECIPES"; then
         exit 1
       fi
 
-      if sh "$SCRIPT_SONAR_SCAN" "$MODULE"; then
+      # shellcheck disable=SC1090
+      if . "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
         if [ -n "$SONARQUBE_TOKEN" ]; then
 
@@ -240,7 +243,8 @@ if test -e "$RECIPES"; then
 
         if [ -n "$ADMIN_PASSWORD" ]; then
       
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
+          # shellcheck disable=SC1090
+          if . "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
 
             echo "SonarQube is ready"
 
@@ -254,7 +258,8 @@ if test -e "$RECIPES"; then
 
         else
 
-          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
+          # shellcheck disable=SC1090
+          if . "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
 
             echo "SonarQube is ready"
 
@@ -279,10 +284,6 @@ if test -e "$RECIPES"; then
       exit 1
     fi
   }
-
-  SCRIPT_GET_SONARQUBE="get_sonar_qube.sh"
-  RECIPE_SONAR_CUBE="$RECIPES/SonarQube/installation_parameters_sonarqube.sh"
-  SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/$SCRIPT_GET_SONARQUBE"
 
   if [ -n "$SONARQUBE_SERVER" ]; then
 
