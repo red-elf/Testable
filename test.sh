@@ -233,7 +233,17 @@ if test -e "$RECIPES"; then
 
   if [ -n "$SONARQUBE_SERVER" ]; then
 
-    echo "Using external SonarQube instance: $SONARQUBE_SERVER"
+    if [ "$SONARQUBE_SERVER" = "localhost" ] || [ "$SONARQUBE_SERVER" = "127.0.0.1" ]; then
+
+      echo "Using localhost SonarQube instance"
+
+      # TODO: If not up already do BRING_SONARQUBE_UP
+
+    else
+
+      echo "Using external SonarQube instance: $SONARQUBE_SERVER"
+
+    fi
 
   else
 
