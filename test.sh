@@ -233,8 +233,17 @@ if test -e "$RECIPES"; then
             exit 1
           fi
 
+          if [ -z "$2" ]; then
+
+            echo "ERROR: Port parameter is mandatory"
+            exit 1
+          fi
+
+          PORT_TO_SET="$2"
           HOST_NAME_TO_SET="$1"
-          SONARQUBE_SERVER="$HOST_NAME_TO_SET"
+          
+          SONARQUBE_SERVER="http://$HOST_NAME_TO_SET:$PORT_TO_SET"
+          
 
           export SONARQUBE_SERVER
 
@@ -248,7 +257,7 @@ if test -e "$RECIPES"; then
 
             echo "SonarQube is ready"
 
-            ADD_SONARQUBE_SERVER_VARIABLE "localhost"
+            ADD_SONARQUBE_SERVER_VARIABLE "localhost" "$SONARQUBE_PORT"
 
           else
 
@@ -263,7 +272,7 @@ if test -e "$RECIPES"; then
 
             echo "SonarQube is ready"
 
-            ADD_SONARQUBE_SERVER_VARIABLE "localhost"
+            ADD_SONARQUBE_SERVER_VARIABLE "localhost" "$SONARQUBE_PORT"
 
           else
 
