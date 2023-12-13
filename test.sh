@@ -270,15 +270,16 @@ if test -e "$RECIPES"; then
       DOCKER_CONTAINER_PREFIX="sonarqube"
       DOCKER_CONTAINER="$DOCKER_CONTAINER_PREFIX.$SONARQUBE_NAME"
 
-      echo "Checking: $SONARQUBE_NAME"
+      echo "Checking: $DOCKER_CONTAINER"
 
-      if [ "$SONARQUBE_NAME" = "" ] || ! docker ps -a | grep "$DOCKER_CONTAINER"; then
+      if docker ps -a | grep "$DOCKER_CONTAINER"; then
 
-        BRING_SONARQUBE_UP
+        echo "Using localhost SonarQube instance"
 
       else
 
-        echo "Using localhost SonarQube instance"
+        BRING_SONARQUBE_UP
+        
       fi
 
     else
