@@ -288,7 +288,7 @@ if test -e "$RECIPES"; then
 
     else
 
-      echo "ERROR: Not found '$SCRIPT_GET_SONARQUBE_FULL_PATH'"
+      echo "ERROR: Script not found '$SCRIPT_GET_SONARQUBE_FULL_PATH'"
       exit 1
     fi
   }
