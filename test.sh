@@ -122,7 +122,8 @@ if test -e "$RECIPES"; then
   BRING_SONARQUBE_UP() {
 
     # TODO: 
-    # 
+    #
+    # - Handle no SONARQUBE_SERVER as localhost
     # - Once the SonarQube is up, export the env. vatiable for SONARQUBE_SERVER if it is not already defined in .rc file!
 
     if test -e "$RECIPE_SONAR_CUBE"; then
