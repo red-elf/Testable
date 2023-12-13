@@ -109,8 +109,6 @@ if test -e "$RECIPES"; then
 
           SONARQUBE_PROJECT="${VERSIONABLE_NAME_NO_SPACE}_$VERSIONABLE_VERSION_PRIMARY.$VERSIONABLE_VERSION_SECONDARY.$VERSIONABLE_VERSION_PATCH"
           BADGE_TOKEN_OBTAIN_URL="$SONARQUBE_SERVER/api/project_badges/token?project=$SONARQUBE_PROJECT"
-          BADGE_URL="$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$SONARQUBE_TOKEN"
-
           BADGE_TOKEN_JSON=$(curl "$BADGE_TOKEN_OBTAIN_URL")
 
           if [ "$BADGE_TOKEN_JSON" = "" ]; then
@@ -119,7 +117,11 @@ if test -e "$RECIPES"; then
 
           else
 
-              # TODO: Get badge token from obtained JSON (BADGE_TOKEN_JSON)
+              EXTRACTED_TOKEN=$(jq -r '.token' <<< "$BADGE_TOKEN_JSON")
+
+              echo "Badge token: $EXTRACTED_TOKEN"
+
+              BADGE_URL="$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$EXTRACTED_TOKEN"
 
               echo "Badge URL: $BADGE_URL"
 
@@ -279,7 +281,7 @@ if test -e "$RECIPES"; then
       else
 
         BRING_SONARQUBE_UP
-        
+
       fi
 
     else
