@@ -8,6 +8,17 @@ if [ -z "$SUBMODULES_HOME" ]; then
   exit 1
 fi
 
+SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
+
+if ! test -e "$SCRIPT_ENV"; then
+
+    echo "ERROR: Script not found '$SCRIPT_ENV'"
+    exit 1
+fi
+
+# shellcheck disable=SC1090
+. "$SCRIPT_ENV"
+
 echo "Starting the test procedure"
 
 if [ -n "$1" ]; then
@@ -123,7 +134,6 @@ if test -e "$RECIPES"; then
 
     # TODO: 
     #
-    # - Handle no SONARQUBE_SERVER as localhost
     # - Once the SonarQube is up, export the env. vatiable for SONARQUBE_SERVER if it is not already defined in .rc file!
 
     if test -e "$RECIPE_SONAR_CUBE"; then
@@ -158,11 +168,29 @@ if test -e "$RECIPES"; then
             exit 1
           fi
 
+          ADD_SONARQUBE_SERVER_VARIABLE() {
+
+            if [ -z "$1" ]; then
+
+              echo "ERROR: Hostname parameter is mandatory"
+              exit 1
+            fi
+
+            HOST_NAME_TO_SET="$1"
+            SONARQUBE_SERVER="$HOST_NAME_TO_SET"
+
+            export SONARQUBE_SERVER
+
+            ADD_VARIABLE "SONARQUBE_SERVER" "$HOST_NAME_TO_SET"
+          }
+
           if [ -n "$ADMIN_PASSWORD" ]; then
         
             if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
 
               echo "SonarQube is ready"
+
+              ADD_SONARQUBE_SERVER_VARIABLE "localhost"
 
             else
 
@@ -175,6 +203,8 @@ if test -e "$RECIPES"; then
             if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
 
               echo "SonarQube is ready"
+
+              ADD_SONARQUBE_SERVER_VARIABLE "localhost"
 
             else
 
