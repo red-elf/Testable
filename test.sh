@@ -252,6 +252,22 @@ if test -e "$RECIPES"; then
 
     if [ "$SONARQUBE_SERVER" = "localhost" ] || [ "$SONARQUBE_SERVER" = "127.0.0.1" ]; then
 
+      if test -e "$RECIPE_SONAR_CUBE"; then
+
+        # shellcheck disable=SC1090
+        . "$RECIPE_SONAR_CUBE"
+
+        if [ -n "$SONARQUBE_NAME" ]; then
+          
+          echo "SonarQube container: $SONARQUBE_NAME"
+
+        else
+          
+          echo "ERROR: SONARQUBE_NAME is not provided"
+          exit 1
+        fi
+      fi
+
       if [ "$SONARQUBE_NAME" = "" ]; then
 
         echo "WARNING: No 'SONARQUBE_NAME' to check"
@@ -261,7 +277,7 @@ if test -e "$RECIPES"; then
         echo "Checking: $SONARQUBE_NAME"
       fi
 
-      if GET_CONTAINER_ADDRESS "$SONARQUBE_NAME" | grep "Error: No such object" >/dev/null 2>&1 || [ "$SONARQUBE_NAME" = "" ]; then
+      if [ "$SONARQUBE_NAME" = "" ] || GET_CONTAINER_ADDRESS "$SONARQUBE_NAME" | grep "Error: No such object"; then
 
         BRING_SONARQUBE_UP
 
