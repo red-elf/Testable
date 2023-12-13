@@ -9,11 +9,18 @@ if [ -z "$SUBMODULES_HOME" ]; then
 fi
 
 SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
+SCRIPT_GET_JQ="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/Programs/get_jq.sh"
 SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
 
 if ! test -e "$SCRIPT_ENV"; then
 
     echo "ERROR: Script not found '$SCRIPT_ENV'"
+    exit 1
+fi
+
+if ! test -e "$SCRIPT_GET_JQ"; then
+
+    echo "ERROR: Script not found '$SCRIPT_GET_JQ'"
     exit 1
 fi
 
@@ -111,12 +118,21 @@ if test -e "$RECIPES"; then
           BADGE_TOKEN_OBTAIN_URL="$SONARQUBE_SERVER/api/project_badges/token?project=$SONARQUBE_PROJECT"
           BADGE_TOKEN_JSON=$(curl "$BADGE_TOKEN_OBTAIN_URL")
 
-          if [ "$BADGE_TOKEN_JSON" = "" ]; then
+          if [ "$BADGE_TOKEN_JSON" = "" ] || echo "$BADGE_TOKEN_JSON" | grep "errors\":" >/dev/null 2>&1; then
 
-            echo "WARNING: No badge token JSON obtained"
+            echo "ERROR: No badge token has been generated"
+              
+              if [ ! "$BADGE_TOKEN_JSON" = "" ]; then
+
+                echo "$BADGE_TOKEN_JSON"
+              fi
+              
+              exit 1
 
           else
 
+            if sh "$SCRIPT_GET_JQ" >/dev/null 2>&1; then
+              
               EXTRACTED_TOKEN=$(jq -r '.token' <<< "$BADGE_TOKEN_JSON")
 
               echo "Badge token: $EXTRACTED_TOKEN"
@@ -130,6 +146,12 @@ if test -e "$RECIPES"; then
               # - Here use the proper token to obtain the badge
               # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
               #
+
+            else
+
+                echo "ERROR: JQ not available"
+                exit 1
+            fi
           fi
 
         else
