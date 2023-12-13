@@ -133,7 +133,7 @@ if test -e "$RECIPES"; then
 
             if sh "$SCRIPT_GET_JQ" >/dev/null 2>&1; then
               
-              EXTRACTED_TOKEN=$(jq -r '.token' <<< "$BADGE_TOKEN_JSON")
+              EXTRACTED_TOKEN=$(echo "$BADGE_TOKEN_JSON" | jq -r '.token')
 
               echo "Badge token: $EXTRACTED_TOKEN"
 
