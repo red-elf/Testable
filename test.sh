@@ -114,9 +114,8 @@ if test -e "$RECIPES"; then
           echo "Badge URL: $BADGE_URL"
 
           # TODO:
-          # 
-          # - Once sonar qube has been set, setup tokens and permissions
-          # - Here us the proper token to obtain the badge
+          #
+          # - Here use the proper token to obtain the badge
           # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
 
         else
