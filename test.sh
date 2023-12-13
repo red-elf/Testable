@@ -30,8 +30,8 @@ fi
 SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
 RECIPE_SONAR_CUBE="$RECIPES/SonarQube/installation_parameters_sonarqube.sh"
 SCRIPT_GET_JQ="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/Programs/get_jq.sh"
-SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
 SCRIPT_GET_SONARQUBE_FULL_PATH="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/get_sonar_qube.sh"
+SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
 
 if ! test -e "$SCRIPT_ENV"; then
 
@@ -76,7 +76,7 @@ if test -e "$RECIPES"; then
       fi
 
       # shellcheck disable=SC1090
-      if . "$SCRIPT_SONAR_SCAN" "$MODULE"; then
+      if sh "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
         if [ -n "$SONARQUBE_TOKEN" ]; then
 
@@ -244,7 +244,7 @@ if test -e "$RECIPES"; then
         if [ -n "$ADMIN_PASSWORD" ]; then
       
           # shellcheck disable=SC1090
-          if . "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
 
             echo "SonarQube is ready"
 
@@ -259,7 +259,7 @@ if test -e "$RECIPES"; then
         else
 
           # shellcheck disable=SC1090
-          if . "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
 
             echo "SonarQube is ready"
 
