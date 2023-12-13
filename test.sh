@@ -76,7 +76,7 @@ if test -e "$RECIPES"; then
       fi
 
       # shellcheck disable=SC1090
-      if sh "$SCRIPT_SONAR_SCAN" "$MODULE"; then
+      if bash "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
         if [ -n "$SONARQUBE_TOKEN" ]; then
 
@@ -134,7 +134,7 @@ if test -e "$RECIPES"; then
 
           else
 
-            if sh "$SCRIPT_GET_JQ" >/dev/null 2>&1; then
+            if bash "$SCRIPT_GET_JQ" >/dev/null 2>&1; then
               
               EXTRACTED_TOKEN=$(echo "$BADGE_TOKEN_JSON" | jq -r '.token')
 
