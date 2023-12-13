@@ -151,7 +151,9 @@ if test -e "$RECIPES"; then
     RUN_CODEBASE_TESTS
   }
 
-  BRING_SONARQUBE_UP() {
+  LOAD_SONARQUBE_RECIPE() {
+
+    echo "Loading the SonarQube recipe: '$RECIPE_SONAR_CUBE'"
 
     if test -e "$RECIPE_SONAR_CUBE"; then
 
@@ -168,79 +170,90 @@ if test -e "$RECIPES"; then
         exit 1
       fi
 
-      if [ -z "$SONARQUBE_PORT" ]; then
-        
-        SONARQUBE_PORT="9000"
-      fi
+      echo "Te SonarQube recipe has been loaded: '$RECIPE_SONAR_CUBE'"
 
-      echo "To bind the port: $SONARQUBE_PORT"
+    else
 
-      if test -e "$SCRIPT_GET_SONARQUBE_FULL_PATH"; then
+      echo "WARNING: Could not found recipe to load: '$RECIPE_SONAR_CUBE'"
+    fi
+  }
 
-        if [ -n "$DB_USER" ]; then
+  BRING_SONARQUBE_UP() {
 
-          if [ -z "$DB_PASSWORD" ]; then
-        
-            echo "ERROR: Password parameter is mandatory when DB user is provided for the test"
-            exit 1
-          fi
+    LOAD_SONARQUBE_RECIPE
 
-          ADD_SONARQUBE_SERVER_VARIABLE() {
+    if [ -z "$SONARQUBE_PORT" ]; then
+      
+      SONARQUBE_PORT="9000"
+    fi
 
-            if [ -z "$1" ]; then
+    echo "To bind the port: $SONARQUBE_PORT"
 
-              echo "ERROR: Hostname parameter is mandatory"
-              exit 1
-            fi
+    if test -e "$SCRIPT_GET_SONARQUBE_FULL_PATH"; then
 
-            HOST_NAME_TO_SET="$1"
-            SONARQUBE_SERVER="$HOST_NAME_TO_SET"
+      if [ -n "$DB_USER" ]; then
 
-            export SONARQUBE_SERVER
-
-            ADD_VARIABLE "SONARQUBE_SERVER" "$HOST_NAME_TO_SET"
-          }
-
-          if [ -n "$ADMIN_PASSWORD" ]; then
-        
-            if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
-
-              echo "SonarQube is ready"
-
-              ADD_SONARQUBE_SERVER_VARIABLE "localhost"
-
-            else
-
-              echo "ERROR: SonarQube is not ready (2)"
-              exit 1
-            fi
-
-          else
-
-            if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
-
-              echo "SonarQube is ready"
-
-              ADD_SONARQUBE_SERVER_VARIABLE "localhost"
-
-            else
-
-              echo "ERROR: SonarQube is not ready (1)"
-              exit 1
-            fi
-          fi
-          
-        else
-
-          echo "ERROR: DB user parameter is mandatory"
+        if [ -z "$DB_PASSWORD" ]; then
+      
+          echo "ERROR: Password parameter is mandatory when DB user is provided for the test"
           exit 1
         fi
 
+        ADD_SONARQUBE_SERVER_VARIABLE() {
+
+          if [ -z "$1" ]; then
+
+            echo "ERROR: Hostname parameter is mandatory"
+            exit 1
+          fi
+
+          HOST_NAME_TO_SET="$1"
+          SONARQUBE_SERVER="$HOST_NAME_TO_SET"
+
+          export SONARQUBE_SERVER
+
+          ADD_VARIABLE "SONARQUBE_SERVER" "$HOST_NAME_TO_SET"
+        }
+
+        if [ -n "$ADMIN_PASSWORD" ]; then
+      
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD" "$ADMIN_PASSWORD"; then
+
+            echo "SonarQube is ready"
+
+            ADD_SONARQUBE_SERVER_VARIABLE "localhost"
+
+          else
+
+            echo "ERROR: SonarQube is not ready (2)"
+            exit 1
+          fi
+
+        else
+
+          if sh "$SCRIPT_GET_SONARQUBE_FULL_PATH" "$SONARQUBE_NAME" "$SONARQUBE_PORT" "$DB_USER" "$DB_PASSWORD"; then
+
+            echo "SonarQube is ready"
+
+            ADD_SONARQUBE_SERVER_VARIABLE "localhost"
+
+          else
+
+            echo "ERROR: SonarQube is not ready (1)"
+            exit 1
+          fi
+        fi
+        
       else
 
-        echo "ERROR: Not found '$SCRIPT_GET_SONARQUBE_FULL_PATH'"
+        echo "ERROR: DB user parameter is mandatory"
         exit 1
       fi
+
+    else
+
+      echo "ERROR: Not found '$SCRIPT_GET_SONARQUBE_FULL_PATH'"
+      exit 1
     fi
   }
 
@@ -252,21 +265,7 @@ if test -e "$RECIPES"; then
 
     if [ "$SONARQUBE_SERVER" = "localhost" ] || [ "$SONARQUBE_SERVER" = "127.0.0.1" ]; then
 
-      if test -e "$RECIPE_SONAR_CUBE"; then
-
-        # shellcheck disable=SC1090
-        . "$RECIPE_SONAR_CUBE"
-
-        if [ -n "$SONARQUBE_NAME" ]; then
-          
-          echo "SonarQube container: $SONARQUBE_NAME"
-
-        else
-          
-          echo "ERROR: SONARQUBE_NAME is not provided"
-          exit 1
-        fi
-      fi
+      LOAD_SONARQUBE_RECIPE
 
       if [ "$SONARQUBE_NAME" = "" ]; then
 
