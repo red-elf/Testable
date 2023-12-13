@@ -68,7 +68,7 @@ if test -e "$RECIPES"; then
       echo "Starting the scan"
 
       # shellcheck disable=SC1090
-      if exec bash -c "$SCRIPT_SONAR_SCAN $MODULE"; then
+      if bash "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
         if [ -n "$SONARQUBE_TOKEN" ]; then
 
