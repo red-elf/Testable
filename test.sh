@@ -31,7 +31,6 @@ SCRIPT_ENV="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/environment.sh"
 RECIPE_SONAR_CUBE="$RECIPES/SonarQube/installation_parameters_sonarqube.sh"
 SCRIPT_GET_JQ="$SUBMODULES_HOME/Software-Toolkit/Utils/Sys/Programs/get_jq.sh"
 SCRIPT_GET_SONARQUBE="$SUBMODULES_HOME/Software-Toolkit/Utils/SonarQube/get_sonar_qube.sh"
-SCRIPT_GET_CONTAINER_ADDRESS="$SUBMODULES_HOME/Software-Toolkit/Utils/Docker/get_container_address.sh"
 
 if ! test -e "$SCRIPT_ENV"; then
 
@@ -45,17 +44,8 @@ if ! test -e "$SCRIPT_GET_JQ"; then
     exit 1
 fi
 
-if ! test -e "$SCRIPT_GET_CONTAINER_ADDRESS"; then
-
-    echo "ERROR: Script not found '$SCRIPT_GET_CONTAINER_ADDRESS'"
-    exit 1
-fi
-
 # shellcheck disable=SC1090
 . "$SCRIPT_ENV"
-
-# shellcheck disable=SC1090
-. "$SCRIPT_GET_CONTAINER_ADDRESS"
 
 echo "Starting the test procedure"
 
@@ -244,9 +234,9 @@ if test -e "$RECIPES"; then
           
           SONARQUBE_SERVER="http://$HOST_NAME_TO_SET:$PORT_TO_SET"
           
-          export SONARQUBE_SERVER
-
           ADD_VARIABLE "SONARQUBE_SERVER" "$SONARQUBE_SERVER"
+
+          export SONARQUBE_SERVER
         }
 
         if [ -n "$ADMIN_PASSWORD" ]; then
