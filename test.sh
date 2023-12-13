@@ -252,7 +252,16 @@ if test -e "$RECIPES"; then
 
     if [ "$SONARQUBE_SERVER" = "localhost" ] || [ "$SONARQUBE_SERVER" = "127.0.0.1" ]; then
 
-      if GET_CONTAINER_ADDRESS "$SONARQUBE_NAME" | grep "Error: No such object" >/dev/null 2>&1; then
+      if [ "$SONARQUBE_NAME" = "" ]; then
+
+        echo "WARNING: No 'SONARQUBE_NAME' to check"
+
+      else
+
+        echo "Checking: $SONARQUBE_NAME"
+      fi
+
+      if GET_CONTAINER_ADDRESS "$SONARQUBE_NAME" | grep "Error: No such object" >/dev/null 2>&1 || [ "$SONARQUBE_NAME" = "" ]; then
 
         BRING_SONARQUBE_UP
 
