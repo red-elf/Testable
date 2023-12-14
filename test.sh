@@ -67,9 +67,18 @@ if test -e "$RECIPES"; then
 
       echo "Starting the scan"
 
+      # FIXME: When targetin remote SonarQube instance
+      #
+      # Not authorized. Please check the user token in the property 'sonar.token' or the credentials in the properties 'sonar.login' and 'sonar.password'.
+      #
+      # Request token from remot server instance if not available
+      #
+
       # shellcheck disable=SC1090
       if bash "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
+        # FIXME: Check if this condition is still valid for badges since we rely on special badge token!
+        #
         if [ -n "$SONARQUBE_TOKEN" ]; then
 
           echo "Obtaining the Qulity Gate badge"
