@@ -238,6 +238,8 @@ if test -e "$RECIPES"; then
           ADD_VARIABLE "SONARQUBE_PORT" "$PORT_TO_SET"
           ADD_VARIABLE "SONARQUBE_HOST" "$HOST_NAME_TO_SET"
           ADD_VARIABLE "SONARQUBE_SERVER" "$SONARQUBE_SERVER"
+          
+          ADD_LINE_BREAK
         }
 
         if [ -n "$ADMIN_PASSWORD" ]; then
