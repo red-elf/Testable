@@ -67,7 +67,7 @@ if test -e "$RECIPES"; then
 
       echo "Starting the scan"
 
-      # FIXME: When targetin remote SonarQube instance
+      # FIXME: When targeting remote SonarQube instance
       #
       # Not authorized. Please check the user token in the property 'sonar.token' or the credentials in the properties 'sonar.login' and 'sonar.password'.
       #
@@ -77,90 +77,80 @@ if test -e "$RECIPES"; then
       # shellcheck disable=SC1090
       if bash "$SCRIPT_SONAR_SCAN" "$MODULE"; then
 
-        # FIXME: Check if this condition is still valid for badges since we rely on special badge token!
-        #
-        if [ -n "$SONARQUBE_TOKEN" ]; then
+        echo "Obtaining the Qulity Gate badge"
 
-          echo "Obtaining the Qulity Gate badge"
+        SCRIPT_VERSION="$HERE/Version/version.sh"
 
-          SCRIPT_VERSION="$HERE/Version/version.sh"
+        if ! test -e "$SCRIPT_VERSION"; then
 
-          if ! test -e "$SCRIPT_VERSION"; then
+            echo "ERROR: Version file not found '$SCRIPT_VERSION'"
+            exit 1
+        fi
 
-              echo "ERROR: Version file not found '$SCRIPT_VERSION'"
-              exit 1
-          fi
+        # shellcheck disable=SC1090
+        . "$SCRIPT_VERSION"
 
-          # shellcheck disable=SC1090
-          . "$SCRIPT_VERSION"
+        if [ -z "$VERSIONABLE_VERSION_PRIMARY" ]; then
 
-          if [ -z "$VERSIONABLE_VERSION_PRIMARY" ]; then
+            echo "ERROR: 'VERSIONABLE_VERSION_PRIMARY' variable not set"
+            exit 1
+        fi
 
-              echo "ERROR: 'VERSIONABLE_VERSION_PRIMARY' variable not set"
-              exit 1
-          fi
+        if [ -z "$VERSIONABLE_VERSION_SECONDARY" ]; then
 
-          if [ -z "$VERSIONABLE_VERSION_SECONDARY" ]; then
+            echo "ERROR: 'VERSIONABLE_VERSION_SECONDARY' variable not set"
+            exit 1
+        fi
 
-              echo "ERROR: 'VERSIONABLE_VERSION_SECONDARY' variable not set"
-              exit 1
-          fi
+        if [ -z "$VERSIONABLE_VERSION_PATCH" ]; then
 
-          if [ -z "$VERSIONABLE_VERSION_PATCH" ]; then
+            echo "ERROR: 'VERSIONABLE_VERSION_PATCH' variable not set"
+            exit 1
+        fi
 
-              echo "ERROR: 'VERSIONABLE_VERSION_PATCH' variable not set"
-              exit 1
-          fi
+        if [ -z "$VERSIONABLE_NAME_NO_SPACE" ]; then
 
-          if [ -z "$VERSIONABLE_NAME_NO_SPACE" ]; then
+            echo "ERROR: 'VERSIONABLE_NAME_NO_SPACE' variable not set"
+            exit 1
+        fi
 
-              echo "ERROR: 'VERSIONABLE_NAME_NO_SPACE' variable not set"
-              exit 1
-          fi
+        SONARQUBE_PROJECT="${VERSIONABLE_NAME_NO_SPACE}_$VERSIONABLE_VERSION_PRIMARY.$VERSIONABLE_VERSION_SECONDARY.$VERSIONABLE_VERSION_PATCH"
+        BADGE_TOKEN_OBTAIN_URL="$SONARQUBE_SERVER/api/project_badges/token?project=$SONARQUBE_PROJECT"
+        BADGE_TOKEN_JSON=$(curl "$BADGE_TOKEN_OBTAIN_URL")
 
-          SONARQUBE_PROJECT="${VERSIONABLE_NAME_NO_SPACE}_$VERSIONABLE_VERSION_PRIMARY.$VERSIONABLE_VERSION_SECONDARY.$VERSIONABLE_VERSION_PATCH"
-          BADGE_TOKEN_OBTAIN_URL="$SONARQUBE_SERVER/api/project_badges/token?project=$SONARQUBE_PROJECT"
-          BADGE_TOKEN_JSON=$(curl "$BADGE_TOKEN_OBTAIN_URL")
+        if [ "$BADGE_TOKEN_JSON" = "" ] || echo "$BADGE_TOKEN_JSON" | grep "errors\":" >/dev/null 2>&1; then
 
-          if [ "$BADGE_TOKEN_JSON" = "" ] || echo "$BADGE_TOKEN_JSON" | grep "errors\":" >/dev/null 2>&1; then
+          echo "ERROR: No badge token has been generated"
+            
+            if [ ! "$BADGE_TOKEN_JSON" = "" ]; then
 
-            echo "ERROR: No badge token has been generated"
-              
-              if [ ! "$BADGE_TOKEN_JSON" = "" ]; then
-
-                echo "$BADGE_TOKEN_JSON"
-              fi
-              
-              exit 1
-
-          else
-
-            if bash "$SCRIPT_GET_JQ" >/dev/null 2>&1; then
-              
-              EXTRACTED_TOKEN=$(echo "$BADGE_TOKEN_JSON" | jq -r '.token')
-
-              echo "Badge token: $EXTRACTED_TOKEN"
-
-              BADGE_URL="$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$EXTRACTED_TOKEN"
-
-              echo "Badge URL: $BADGE_URL"
-
-              # TODO:
-              #
-              # - Here use the proper token to obtain the badge
-              # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
-
-            else
-
-                echo "ERROR: JQ not available"
-                exit 1
+              echo "$BADGE_TOKEN_JSON"
             fi
-          fi
+            
+            exit 1
 
         else
 
-          echo "ERROR: The 'SONARQUBE_TOKEN' is not defined."
-          exit 1
+          if bash "$SCRIPT_GET_JQ" >/dev/null 2>&1; then
+            
+            EXTRACTED_TOKEN=$(echo "$BADGE_TOKEN_JSON" | jq -r '.token')
+
+            echo "Badge token: $EXTRACTED_TOKEN"
+
+            BADGE_URL="$SONARQUBE_SERVER/api/project_badges/measure?project=$SONARQUBE_PROJECT&metric=alert_status&token=$EXTRACTED_TOKEN"
+
+            echo "Badge URL: $BADGE_URL"
+
+            # TODO:
+            #
+            # - Here use the proper token to obtain the badge
+            # - Write the code quality badge and re-generated PDF from README file: Assets/Generated_SonarQube_Measure.svg
+
+          else
+
+              echo "ERROR: JQ not available"
+              exit 1
+          fi
         fi
       fi
 
@@ -245,6 +235,8 @@ if test -e "$RECIPES"; then
           
           SONARQUBE_SERVER="http://$HOST_NAME_TO_SET:$PORT_TO_SET"
           
+          ADD_VARIABLE "SONARQUBE_PORT" "$PORT_TO_SET"
+          ADD_VARIABLE "SONARQUBE_HOST" "$HOST_NAME_TO_SET"
           ADD_VARIABLE "SONARQUBE_SERVER" "$SONARQUBE_SERVER"
         }
 
